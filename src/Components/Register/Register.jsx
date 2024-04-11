@@ -1,40 +1,52 @@
 import Styles from "./Register.module.css";
 import { useFormik } from "formik";
+import * as Yup from 'yup';
 
 export default function Register() {
 
   function submitRegister(){
     console.log('submit')
   }
-  function validate(values){
-    let errors={};
-    let phoneRegex = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-    let emailRegex = /^[A-Z0-9._X+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-    if (!values.name){
-      errors.name = "Name is required!";
-    } else if (values.name.lenght < 3){
-      errors.name = "Name minlenght is 3";
-    } else if(values.name.length > 10){
-      errors.name = "Name maxlength is 10";
-    }
-    if(!phoneRegex.test(values.phone)){
-      errors.phone = "Phone number invalid";
-    } else if(!values.phone){
-      errors.phone = "Phone is required";
-    }
-    if(!values.email){
-      errors.email = "Email is required";
-    } else if(!emailRegex.test(values.email)){
-      errors.email = "Email invalid";
-    }
-    if(!values.password){
-      errors.password = "Password is required";
-    }
-    if(!values.rePassword){
-      errors.rePassword = "rePassword is required";
-    }
-    return errors;
-  }
+
+  // function validate(values){
+  //   let errors={};
+  //   let phoneRegex = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+  //   let emailRegex = /^[A-Z0-9._X+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+  //   if (!values.name){
+  //     errors.name = "Name is required!";
+  //   } else if (values.name.length < 3){
+  //     errors.name = "Name minlenght is 3";
+  //   } else if(values.name.length > 10){
+  //     errors.name = "Name maxlength is 10";
+  //   }
+  //   if(!phoneRegex.test(values.phone)){
+  //     errors.phone = "Phone number invalid";
+  //   } else if(!values.phone){
+  //     errors.phone = "Phone is required";
+  //   }
+  //   if(!values.email){
+  //     errors.email = "Email is required";
+  //   } else if(!emailRegex.test(values.email)){
+  //     errors.email = "Email invalid";
+  //   }
+  //   if(!values.password){
+  //     errors.password = "Password is required";
+  //   }
+  //   if(!values.rePassword){
+  //     errors.rePassword = "rePassword is required";
+  //   }
+  //   return errors;
+  // }
+
+  const phoneRegex = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
+let validationSchema = Yup.object({
+  name: Yup.string().min(3, "Name minlenght is 3").max(10, "Name maxlength is 10").required("Name is required!"),
+  email: Yup.string().email("Email is invalid").required("Email is required!"),
+  phone: Yup.string().matches(phoneRegex, "Phone is invalid").required("Phone is required!"),
+  password: Yup.string().matches(/^[A-Z][a-z0-9]{5,10}$/, "Password is invalid").required("Password is required!"),
+  rePassword:Yup.string().oneOf([Yup.ref("password")]).required("rePassword is required!"),
+})
 
   let formik = useFormik({
     initialValues: {
@@ -44,7 +56,7 @@ export default function Register() {
       password: "",
       rePassword: "",
     },
-    validate,
+    validationSchema,
     onSubmit: submitRegister,
   })
   return (
@@ -72,7 +84,7 @@ export default function Register() {
         <input onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.rePassword} type="password" className="form-control" id="rePassword" name="rePassword" />
         {formik.errors.rePassword && formik.touched.rePassword && <div className="alert alert-danger mt-2 p-2">{formik.errors.rePassword}</div>}
 
-        <button type="submit" className="btn bg-main text-white mt-2">Register</button>
+        <button disabled={!formik.isValid && formik.dirty} type="submit" className="btn bg-main text-white mt-2">Register</button>
       </form>
     </div>
 
