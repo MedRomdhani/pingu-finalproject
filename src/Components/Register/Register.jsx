@@ -1,11 +1,10 @@
 import Styles from "./Register.module.css";
 import { useFormik } from "formik";
-import * as Yup from 'yup';
+import * as Yup from "yup";
 
 export default function Register() {
-
-  function submitRegister(){
-    console.log('submit')
+  function submitRegister() {
+    console.log("submit");
   }
 
   // function validate(values){
@@ -38,15 +37,27 @@ export default function Register() {
   //   return errors;
   // }
 
-  const phoneRegex = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+  const phoneRegex =
+    /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
-let validationSchema = Yup.object({
-  name: Yup.string().min(3, "Name minlenght is 3").max(10, "Name maxlength is 10").required("Name is required!"),
-  email: Yup.string().email("Email is invalid").required("Email is required!"),
-  phone: Yup.string().matches(phoneRegex, "Phone is invalid").required("Phone is required!"),
-  password: Yup.string().matches(/^[A-Z][a-z0-9]{5,10}$/, "Password is invalid").required("Password is required!"),
-  rePassword:Yup.string().oneOf([Yup.ref("password")]).required("rePassword is required!"),
-})
+  let validationSchema = Yup.object({
+    name: Yup.string()
+      .min(3, "Name minlenght is 3")
+      .max(10, "Name maxlength is 10")
+      .required("Name is required!"),
+    email: Yup.string()
+      .email("Email is invalid")
+      .required("Email is required!"),
+    phone: Yup.string()
+      .matches(phoneRegex, "Phone is invalid")
+      .required("Phone is required!"),
+    password: Yup.string()
+      .matches(/^[A-Z][a-z0-9]{5,10}$/, "Password is invalid")
+      .required("Password is required!"),
+    rePassword: Yup.string()
+      .oneOf([Yup.ref("password")])
+      .required("rePassword is required!"),
+  });
 
   let formik = useFormik({
     initialValues: {
@@ -58,36 +69,101 @@ let validationSchema = Yup.object({
     },
     validationSchema,
     onSubmit: submitRegister,
-  })
+  });
   return (
     <>
-    <div className="w-75 mx-auto py-5">
-    <h3>Register Now</h3>
-      <form onSubmit={formik.handleSubmit}>
-        <label htmlFor="name">Name:</label>
-        <input onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.name} type="text" className="form-control" id="name" name="name" />
-        {formik.errors.name && formik.touched.name && <div className="alert alert-danger mt-2 p-2">{formik.errors.name}</div>}
+      <div className="w-75 mx-auto py-5">
+        <h3>Register Now</h3>
+        <form onSubmit={formik.handleSubmit}>
+          <label htmlFor="name">Name:</label>
+          <input
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            value={formik.values.name}
+            type="text"
+            className="form-control"
+            id="name"
+            name="name"
+          />
+          {formik.errors.name && formik.touched.name && (
+            <div className="alert alert-danger mt-2 p-2">
+              {formik.errors.name}
+            </div>
+          )}
 
-        <label htmlFor="phone">Phone:</label>
-        <input onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.phone} type="tel" className="form-control" id="phone" name="phone" />
-        {formik.errors.phone && formik.touched.phone && <div className="alert alert-danger mt-2 p-2">{formik.errors.phone}</div>}
+          <label htmlFor="phone">Phone:</label>
+          <input
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            value={formik.values.phone}
+            type="tel"
+            className="form-control"
+            id="phone"
+            name="phone"
+          />
+          {formik.errors.phone && formik.touched.phone && (
+            <div className="alert alert-danger mt-2 p-2">
+              {formik.errors.phone}
+            </div>
+          )}
 
-        <label htmlFor="email">Email:</label>
-        <input onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.email} type="email" className="form-control" id="email" name="email" />
-        {formik.errors.email && formik.touched.email && <div className="alert alert-danger mt-2 p-2">{formik.errors.email}</div>}
+          <label htmlFor="email">Email:</label>
+          <input
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            value={formik.values.email}
+            type="email"
+            className="form-control"
+            id="email"
+            name="email"
+          />
+          {formik.errors.email && formik.touched.email && (
+            <div className="alert alert-danger mt-2 p-2">
+              {formik.errors.email}
+            </div>
+          )}
 
-        <label htmlFor="password">Password:</label>
-        <input onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.password} type="password" className="form-control" id="password" name="password" />
-        {formik.errors.password && formik.touched.password && <div className="alert alert-danger mt-2 p-2">{formik.errors.password}</div>}
+          <label htmlFor="password">Password:</label>
+          <input
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            value={formik.values.password}
+            type="password"
+            className="form-control"
+            id="password"
+            name="password"
+          />
+          {formik.errors.password && formik.touched.password && (
+            <div className="alert alert-danger mt-2 p-2">
+              {formik.errors.password}
+            </div>
+          )}
 
-        <label htmlFor="rePassword">RePassword:</label>
-        <input onBlur={formik.handleBlur} onChange={formik.handleChange} value={formik.values.rePassword} type="password" className="form-control" id="rePassword" name="rePassword" />
-        {formik.errors.rePassword && formik.touched.rePassword && <div className="alert alert-danger mt-2 p-2">{formik.errors.rePassword}</div>}
+          <label htmlFor="rePassword">RePassword:</label>
+          <input
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+            value={formik.values.rePassword}
+            type="password"
+            className="form-control"
+            id="rePassword"
+            name="rePassword"
+          />
+          {formik.errors.rePassword && formik.touched.rePassword && (
+            <div className="alert alert-danger mt-2 p-2">
+              {formik.errors.rePassword}
+            </div>
+          )}
 
-        <button disabled={!formik.isValid && formik.dirty} type="submit" className="btn bg-main text-white mt-2">Register</button>
-      </form>
-    </div>
-
+          <button
+            disabled={!formik.isValid && formik.dirty}
+            type="submit"
+            className="btn bg-main text-white mt-2"
+          >
+            Register
+          </button>
+        </form>
+      </div>
     </>
   );
 }
